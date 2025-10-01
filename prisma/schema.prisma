@@ -1,0 +1,145 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  password    String
+  name        String
+  role        UserRole @default(STUDENT)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  studentProfile Student?
+  parentProfile  Parent?
+  sessions       SessionStudent[]
+
+  @@map("users")
+}
+
+model Student {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  firstName  String
+  lastName   String
+  nationalId String?  @unique
+  phone      String?
+  address    String?
+  birthDate  String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  classStudent ClassStudent[]
+  sessions     SessionStudent[]
+  parents      Parent[]
+
+  @@map("students")
+}
+
+model Parent {
+  id      String @id @default(cuid())
+  userId  String @unique
+  phone   String?
+  studentId String @unique
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  student Student @relation(fields: [studentId], references: [id])
+
+  @@map("parents")
+}
+
+model Class {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  grade       String?
+  maxStudents Int      @default(30)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  classStudents ClassStudent[]
+  sessions      Session[]
+
+  @@map("classes")
+}
+
+model ClassStudent {
+  id       String @id @default(cuid())
+  classId  String
+  studentId String
+  enrolledAt DateTime @default(now())
+
+  class   Class   @relation(fields: [classId], references: [id], onDelete: Cascade)
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([classId, studentId])
+  @@map("class_students")
+}
+
+model Session {
+  id          String   @id @default(cuid())
+  classId     String
+  date        String   // Persian date
+  title       String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  class    Class            @relation(fields: [classId], references: [id], onDelete: Cascade)
+  students SessionStudent[]
+
+  @@map("sessions")
+}
+
+model SessionStudent {
+  id             String @id @default(cuid())
+  sessionId      String
+  studentId      String
+  attendance     AttendanceStatus @default(PRESENT)
+  classScore     Float?  // 0-20
+  homeworkScore  Float?  // 0-20
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  student User    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  studentProfile Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, studentId])
+  @@map("session_students")
+}
+
+model Setting {
+  id    String @id @default(cuid())
+  key   String @unique
+  value String
+
+  @@map("settings")
+}
+
+enum UserRole {
+  ADMIN
+  TEACHER
+  STUDENT
+  PARENT
+}
+
+enum AttendanceStatus {
+  PRESENT
+  EXCUSED_ABSENCE
+  UNEXCUSED_ABSENCE
+}
