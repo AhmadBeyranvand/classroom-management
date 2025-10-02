@@ -9,7 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Eye, EyeOff, LogIn, BookOpen, Users, GraduationCap, Shield } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import DotGrid from './DotGrid';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -38,14 +37,14 @@ export default function LoginPage() {
 
       if (response.ok) {
         const data = await response.json();
-        
+
         // Set cookies for authentication
         document.cookie = `token=${data.token}; path=/; max-age=86400; secure; samesite=strict`;
         document.cookie = `userRole=${data.user.role}; path=/; max-age=86400; secure; samesite=strict`;
-        
+
         // Store user info in localStorage
         localStorage.setItem('user', JSON.stringify(data.user));
-        
+
         // Redirect to appropriate dashboard
         switch (data.user.role) {
           case 'ADMIN':
@@ -85,39 +84,18 @@ export default function LoginPage() {
     ADMIN: 'مدیر سیستم',
     TEACHER: 'معلم',
     STUDENT: 'دانش‌آموز',
-    PARENT: 'ولی'
+    PARENT: 'اولیا'
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4 relative overflow-hidden" dir="rtl">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-30">
-        <DotGrid
-
-    dotSize={10}
-
-    gap={15}
-
-    baseColor="#5227FF"
-
-    activeColor="#5227FF"
-
-    proximity={120}
-
-    shockRadius={250}
-
-    shockStrength={5}
-
-    resistance={750}
-
-    returnDuration={1.5}
-
-  />
-        {/* <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500 rounded-full filter blur-3xl"></div>
+        <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500 rounded-full filter blur-3xl"></div>
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500 rounded-full filter blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-500 rounded-full filter blur-3xl"></div> */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-500 rounded-full filter blur-3xl"></div>
       </div>
-      
+
       <div className="w-full max-w-md relative z-10">
         {/* Logo and Title */}
         <div className="text-center mb-8 animate-fade-in">
@@ -148,14 +126,14 @@ export default function LoginPage() {
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="نقش خود را انتخاب کنید" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent style={{direction:"rtl"}}>
                     {Object.entries(roleLabels).map(([role, label]) => {
                       const Icon = roleIcons[role as keyof typeof roleIcons];
                       return (
                         <SelectItem key={role} value={role}>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 justify-start" style={{direction:"rtl"}}>
                             <Icon className="w-4 h-4" />
-                            {label}
+                            <span className='mx-2'> {label} </span>
                           </div>
                         </SelectItem>
                       );
@@ -174,7 +152,7 @@ export default function LoginPage() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
-                  className="text-right"
+                  className="text-center"
                   disabled={loading}
                 />
               </div>
@@ -190,7 +168,7 @@ export default function LoginPage() {
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     required
-                    className="text-right pr-10"
+                    className="text-center"
                     disabled={loading}
                   />
                   <Button
@@ -238,7 +216,7 @@ export default function LoginPage() {
             </form>
 
             {/* Demo Accounts */}
-            <div className="mt-6 pt-6 border-t border-gray-200">
+            {/* <div className="mt-6 pt-6 border-t border-gray-200">
               <p className="text-sm text-gray-600 mb-3 text-center">حساب‌های آزمایشی:</p>
               <div className="space-y-2 text-xs">
                 <div className="flex justify-between items-center p-2 bg-gray-50 rounded">
@@ -254,7 +232,7 @@ export default function LoginPage() {
                   <span className="text-gray-600">student@school.com / student123</span>
                 </div>
               </div>
-            </div>
+            </div> */}
           </CardContent>
         </Card>
 
