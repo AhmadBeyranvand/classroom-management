@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Eye, EyeOff, LogIn, BookOpen, Users, GraduationCap, Shield } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import DotGrid from './DotGrid';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -90,10 +91,31 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4 relative overflow-hidden" dir="rtl">
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500 rounded-full filter blur-3xl"></div>
+      <div className="absolute inset-0 opacity-30">
+        <DotGrid
+
+    dotSize={10}
+
+    gap={15}
+
+    baseColor="#5227FF"
+
+    activeColor="#5227FF"
+
+    proximity={120}
+
+    shockRadius={250}
+
+    shockStrength={5}
+
+    resistance={750}
+
+    returnDuration={1.5}
+
+  />
+        {/* <div className="absolute top-0 left-0 w-96 h-96 bg-blue-500 rounded-full filter blur-3xl"></div>
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-500 rounded-full filter blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-500 rounded-full filter blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-500 rounded-full filter blur-3xl"></div> */}
       </div>
       
       <div className="w-full max-w-md relative z-10">
