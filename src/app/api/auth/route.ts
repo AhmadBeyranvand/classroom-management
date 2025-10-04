@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 
     if (existingUser) {
       return NextResponse.json(
-        { message: 'کاربری با این ایمیل از قبل وجود دارد' },
+        { message: 'کاربری با این نام کاربری از قبل وجود دارد' },
         { status: 409 }
       );
     }

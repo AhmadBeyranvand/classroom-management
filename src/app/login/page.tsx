@@ -177,7 +177,7 @@ export default function LoginPage() {
 
                 {/* Email */}
                 <div className="space-y-2">
-                  <Label htmlFor="email">ایمیل</Label>
+                  <Label htmlFor="email">نام کاربری</Label>
                   <Input
                     id="email"
                     type="email"

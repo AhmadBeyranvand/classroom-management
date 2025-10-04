@@ -14,6 +14,7 @@ import { Plus, Users, Calendar, Settings, BookOpen, UserCheck, UserX, AlertCircl
 import { getCurrentPersianDate } from '@/lib/persian-date';
 import { useRouter } from 'next/navigation';
 import SettingsPanel from '@/components/SettingsPanel';
+import Toastify from 'toastify-js'
 
 interface Class {
   id: string;
@@ -68,10 +69,20 @@ export default function Home() {
   const [selectedStudentForClass, setSelectedStudentForClass] = useState<{ classId: string; studentId: string } | null>(null);
 
   useEffect(() => {
+    Toastify({
+        text: "TEST",
+        gravity:"top"
+      })
     fetchData();
   }, []);
 
   const fetchData = async () => {
+    const authCheck = await fetch("/api/auth")
+    if(authCheck.ok){
+      alert("OK")
+    } else {
+      
+    }
     try {
       const [classesRes, studentsRes, sessionsRes] = await Promise.all([
         fetch('/api/classes'),
@@ -400,7 +411,7 @@ export default function Home() {
                           />
                         </div>
                         <div>
-                          <Label htmlFor="email">ایمیل</Label>
+                          <Label htmlFor="email">نام کاربری</Label>
                           <Input
                             id="email"
                             type="email"
