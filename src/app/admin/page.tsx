@@ -77,12 +77,6 @@ export default function Home() {
   }, []);
 
   const fetchData = async () => {
-    const authCheck = await fetch("/api/auth")
-    if(authCheck.ok){
-      alert("OK")
-    } else {
-      
-    }
     try {
       const [classesRes, studentsRes, sessionsRes] = await Promise.all([
         fetch('/api/classes'),
